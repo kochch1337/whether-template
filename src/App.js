@@ -65,6 +65,17 @@ function App() {
 
   // Function to fetch the weather data for the user's location
   async function getWeatherData(latitude, longitude) {
+    try {
+      const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data.current_weather.weathercode;
+      }
+    } catch (error) {
+      console.error(error);
+    }
     return 0;
   }
 
@@ -91,21 +102,21 @@ function App() {
     }
   }
 
-  const filteredTodos = [];
+  const filteredTodos = filterTodos(currentFilter);
 
   return (
     <>
       <Header />
       <main>
         <InfoBox emoji={weatherStatus.emoji} />
-        {/* <SelectWeather handleChange={handleWeatherSelect} /> */}
+        <SelectWeather handleChange={handleWeatherSelect} />
         <TodoList
-          todos={todos.filter((todo) => !todo.isChecked)}
+          todos={filteredTodos.filter((todo) => !todo.isChecked)}
           toggleCheckbox={toggleCheckbox}
           title="Open ToDos"
         />
         <TodoList
-          todos={todos.filter((todo) => todo.isChecked)}
+          todos={filteredTodos.filter((todo) => todo.isChecked)}
           toggleCheckbox={toggleCheckbox}
           title="Done"
         />

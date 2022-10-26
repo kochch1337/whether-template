@@ -2,8 +2,9 @@ import Svg from "../Svg";
 import Button from "../Button";
 import { ModalBackground, Modal } from "./AddTodo.styled.js";
 import { useState } from "react";
+import AddToDoForm from "../Form";
 
-export default function AddTodo() {
+export default function AddTodo({ addTodo }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -20,6 +21,7 @@ export default function AddTodo() {
       {isOpen && (
         <ModalBackground>
           <Modal>
+            <AddToDoForm addTodo={addTodo} />
             <Button
               type="button"
               variant="close"

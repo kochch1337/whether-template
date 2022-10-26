@@ -1,9 +1,12 @@
+import { extractEventHandlers } from "@mui/base";
 import { useEffect, useState } from "react";
+import AddTodo from "./components/AddTodo";
 import Header from "./components/Header";
 import InfoBox from "./components/InfoBox";
 import SelectWeather from "./components/SelectWeather";
 import TodoList from "./components/TodoList";
 import initialTodos from "./data";
+import { nanoid } from "nanoid";
 
 function App() {
   const [todos, setTodos] = useState(initialTodos);
@@ -45,6 +48,24 @@ function App() {
         } else return item;
       })
     );
+  }
+
+  function addTodo(title, weather) {
+    console.log(title + " - " + weather);
+    const newTodo = {
+      id: nanoid(),
+      title: title,
+      isChecked: false,
+      weather: weather,
+    };
+
+    console.log(newTodo);
+    console.log(todos);
+    console.log([...todos, newTodo]);
+
+    const newArray = [...todos, newTodo];
+
+    setTodos(newArray);
   }
 
   // Function to convert the fetched weather code to our weather status object
@@ -110,6 +131,7 @@ function App() {
       <main>
         <InfoBox emoji={weatherStatus.emoji} />
         <SelectWeather handleChange={handleWeatherSelect} />
+        <AddTodo addTodo={addTodo} />
         <TodoList
           todos={filteredTodos.filter((todo) => !todo.isChecked)}
           toggleCheckbox={toggleCheckbox}

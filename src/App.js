@@ -33,6 +33,19 @@ function App() {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
   }
+  // Function to toggle Checkboxes
+  function toggleCheckbox(todoId) {
+    setTodos(
+      todos.map((item) => {
+        if (item.id === todoId) {
+          return {
+            ...item,
+            isChecked: !item.isChecked,
+          };
+        } else return item;
+      })
+    );
+  }
 
   // Function to convert the fetched weather code to our weather status object
   function convertWeatherCodeToEmoji(weatherCode) {
@@ -65,7 +78,8 @@ function App() {
     switch (currentFilter) {
       case "current":
         return todos.filter(
-          (todo) => todo.weather === weatherStatus.weather || todo.weather === "always"
+          (todo) =>
+            todo.weather === weatherStatus.weather || todo.weather === "always"
         );
       case "always":
       case "good":
@@ -85,7 +99,16 @@ function App() {
       <main>
         <InfoBox emoji={weatherStatus.emoji} />
         {/* <SelectWeather handleChange={handleWeatherSelect} /> */}
-        <TodoList todos={todos} />
+        <TodoList
+          todos={todos.filter((todo) => !todo.isChecked)}
+          toggleCheckbox={toggleCheckbox}
+          title="Open ToDos"
+        />
+        <TodoList
+          todos={todos.filter((todo) => todo.isChecked)}
+          toggleCheckbox={toggleCheckbox}
+          title="Done"
+        />
       </main>
     </>
   );
